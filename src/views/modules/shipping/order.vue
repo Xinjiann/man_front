@@ -78,16 +78,32 @@
         header-align="center"
         align="center"
         label="图片">
+        <template slot-scope="scope">
+    　　　　<img v-if="scope.row.image != null" :src="scope.row.image" width="40" height="40" class="head_pic"/>
+    　　</template>
+      </el-table-column>
+      <el-table-column
+        prop="statusDesc"
+        header-align="center"
+        align="center"
+        label="状态">
       </el-table-column>
       <el-table-column
         fixed="right"
         header-align="center"
         align="center"
-        width="150"
+        width="120"
         label="操作">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">上传</el-button>
+          <el-upload
+            class="upload-demo"
+            action=""
+            :http-request="upload"
+            :data="{id:scope.row.id}"
+            :show-file-list=false>
+            <el-button size="small" type="text">上传</el-button>
+          </el-upload>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">驳回</el-button>
         </template>
       </el-table-column>
@@ -111,6 +127,7 @@
   export default {
     data () {
       return {
+        fileList: [],
         dataForm: {
           key: ''
         },
@@ -130,11 +147,30 @@
       this.getDataList()
     },
     methods: {
+      upload(param) {
+        let formData = new FormData()
+        formData.append("file", param.file)
+        formData.append("id", param.data.id)
+      
+        this.$http({
+          url: this.$http.adornUrl('/shipping_man/file/upload'),
+          method: 'post',
+          data:formData,
+          headers: {
+            "Content-Type": "multipart/form-data" 
+          },
+          params: this.$http.adornParams({
+            
+          })
+        }).then(({data}) => {
+          this.getDataList()
+        })
+      },
       // 获取数据列表
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/shipping/order/list'),
+          url: this.$http.adornUrl('/shipping_man/order/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -143,7 +179,7 @@
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.page.list
+            this.dataList = data.page.records
             this.totalPage = data.page.totalCount
           } else {
             this.dataList = []
@@ -156,7 +192,7 @@
       getStatusOrderList (data) {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/shipping/order/getStatusOrderList'),
+          url: this.$http.adornUrl('/shipping_man/order/getStatusOrderList'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -165,7 +201,7 @@
           })
         }).then(({data}) => {
           if (data && data.code === 0) {
-            this.dataList = data.page.list
+            this.dataList = data.page.records
             this.totalPage = data.page.totalCount
           } else {
             this.dataList = []
@@ -207,7 +243,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/shipping/order/reject'),
+            url: this.$http.adornUrl('/shipping_man/order/reject'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {

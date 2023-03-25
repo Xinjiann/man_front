@@ -26,33 +26,38 @@
         prop="id"
         header-align="center"
         align="center"
-        label="ID">
+        label="ID"
+        width="50">
       </el-table-column>
       <el-table-column
         prop="openid"
         header-align="center"
         align="center"
-        label="openid">
+        label="openid"
+        width="150">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="userName"
         header-align="center"
         align="center"
-        label="名称">
+        label="名称"
+        width="200">
+      </el-table-column>
+      <el-table-column
+        prop="phone"
+        header-align="center"
+        align="center"
+        label="手机"
+        width="200">
       </el-table-column>
       <el-table-column
         prop="createTime"
         header-align="center"
         align="center"
-        label="创建时间">
+        label="注册时间"
+        width="200">
       </el-table-column>
-      <el-table-column
-        prop="delete"
-        header-align="center"
-        align="center"
-        label="删除标志">
-      </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         fixed="right"
         header-align="center"
         align="center"
@@ -62,7 +67,7 @@
           <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
           <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
     <el-pagination
       @size-change="sizeChangeHandle"
@@ -106,7 +111,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/shipping/user/list'),
+          url: this.$http.adornUrl('/shipping_man/user/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -157,7 +162,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/shipping/user/delete'),
+            url: this.$http.adornUrl('/shipping_man/user/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {

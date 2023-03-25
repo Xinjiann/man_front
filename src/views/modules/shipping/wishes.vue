@@ -23,6 +23,13 @@
         width="50">
       </el-table-column>
       <el-table-column
+        prop="id"
+        header-align="center"
+        align="center"
+        label="ID"
+        width="50">
+      </el-table-column>
+      <el-table-column
         prop="content"
         header-align="center"
         align="center"
@@ -32,25 +39,15 @@
         prop="createTime"
         header-align="center"
         align="center"
-        label="创建时间">
+        label="创建时间"
+        width="170">
       </el-table-column>
       <el-table-column
-        prop="createBy"
+        prop="openid"
         header-align="center"
         align="center"
-        label="创建者">
-      </el-table-column>
-      <el-table-column
-        prop="deleted"
-        header-align="center"
-        align="center"
-        label="删除标志">
-      </el-table-column>
-      <el-table-column
-        prop="id"
-        header-align="center"
-        align="center"
-        label="ID">
+        label="创建者"
+        width="200">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -106,7 +103,7 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/shipping/wishes/list'),
+          url: this.$http.adornUrl('/wishes/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -157,7 +154,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/shipping/wishes/delete'),
+            url: this.$http.adornUrl('/wishes/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {
